@@ -22,7 +22,6 @@ fi
 import os
 import textwrap
 import google.generativeai as genai
-import re
 
 # Set the Google API Key (replace with your actual key)
 your_api_key = "AIzaSyAFjcMyHH6bwGVAlIo-qGGdx6YrL_HCuXU"
@@ -44,22 +43,6 @@ def to_markdown(text):
     # Indent each line
     return textwrap.indent(text, '> ', predicate=lambda _: True)
 
-def is_terminal_question(question):
-    """Checks if the question is related to the Linux terminal.
-
-    Args:
-        question: The input question string.
-
-    Returns:
-        A boolean indicating if the question is related to the Linux terminal.
-    """
-    keywords = [
-        'linux', 'terminal', 'command', 'shell', 'bash', 'cli', 'script', 
-        'unix', 'kernel', 'sudo', 'root', 'chmod', 'chown', 'apt-get', 
-        'yum', 'package', 'install', 'update', 'grep', 'awk', 'sed', 'vi', 'vim', 'nano'
-    ]
-    return any(re.search(r'\b' + keyword + r'\b', question, re.IGNORECASE) for keyword in keywords)
-
 # List available models that support text generation
 print("Available models for text generation:")
 for model in genai.list_models():
@@ -67,8 +50,7 @@ for model in genai.list_models():
         print(model.name)
 
 # Load the generative model (replace 'gemini-1.5-pro-latest' if desired)
-model_name = 'gemini-1.0-pro'
-model = genai.GenerativeModel(model_name)
+model = genai.GenerativeModel('gemini-1.0-pro')
 
 print("Welcome to the Genie command! You can ask me questions about the Linux terminal.")
 while True:
@@ -76,16 +58,9 @@ while True:
     if question.lower() == "exit":
         print("Exiting Genie command. Goodbye!")
         break
-    
-    # Append "in Ubuntu" to the question
-    question_with_ubuntu = question + " in Ubuntu"
-    
-    if is_terminal_question(question_with_ubuntu):
-        response = model.generate_content(question_with_ubuntu)
-        print("Genie:")
-        print(to_markdown(response.text))
-    else:
-        print("Genie: I'm sorry, I only answer bash specific questions.")
+    response = model.generate_content(question)
+    print("Genie:")
+    print(to_markdown(response.text))
 
 
 
