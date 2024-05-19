@@ -23,7 +23,7 @@ Setuping the app on your machine
   
   2. Run the installer file named "kero's chat boot"
   ```bash
-  ./mesba7
+  ./code
   ```
 #### Get your own API key
  3. You will be asked for the api key. to get the key go to : 
