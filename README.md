@@ -95,28 +95,74 @@ step by step how to create and the code explanations
 1. First of all this is the python main logic code
 
 ```py
-import json
-import requests
-import sys
-KEY="CHANGE_TO_YOUR_PRIVATE_KEY"
-url =  "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key="  + KEY
+import os
+import textwrap
+import google.generativeai as genai
+import re
 
-if  len(sys.argv)  >  1:
-	text="Help with any question I ask about Linux bash commands only in very summarized answer with a short example usage and don't add any markdown styling make sure all the output you give is pair text. other wise if my question is off topic please only answer politely by refusing to answer this question. So my questions is: "+" ".join(sys.argv[1:])
-else:
-	print("What do you want from me master ?")
-	sys.exit()
+# Set the Google API Key (replace with your actual key)
+your_api_key = "AIzaSyAFjcMyHH6bwGVAlIo-qGGdx6YrL_HCuXU"
+os.environ['GOOGLE_API_KEY'] = your_api_key
 
-data = {"contents": [{"parts": [{"text": text}]}]}
+# Configure Google Generative AI
+genai.configure(api_key=os.environ['GOOGLE_API_KEY'])
 
-response = requests.post(url, headers={"Content-Type": "application/json"}, data=json.dumps(data))
+def to_markdown(text):
+    """Converts plain text to Markdown format with bullets.
 
-if response.status_code ==  200:
-	print(response.json().get("candidates")[0].get("content").get("parts")[0].get("text"))
+    Args:
+        text: The plain text string to convert.
 
-else:
-	print("Error:", response.status_code)
-```
+    Returns:
+        A string containing the Markdown formatted text.
+    """
+    text = text.replace('•', '  *')  # Use two spaces for better formatting
+    # Indent each line
+    return textwrap.indent(text, '> ', predicate=lambda _: True)
+
+def is_terminal_question(question):
+    """Checks if the question is related to the Linux terminal.
+
+    Args:
+        question: The input question string.
+
+    Returns:
+        A boolean indicating if the question is related to the Linux terminal.
+    """
+    keywords = [
+        'linux', 'terminal', 'command', 'shell', 'bash', 'cli', 'script', 
+        'unix', 'kernel', 'sudo', 'root', 'chmod', 'chown', 'apt-get', 
+        'yum', 'package', 'install', 'update', 'grep', 'awk', 'sed', 'vi', 'vim', 'nano'
+    ]
+    return any(re.search(r'\b' + keyword + r'\b', question, re.IGNORECASE) for keyword in keywords)
+
+# List available models that support text generation
+print("Available models for text generation:")
+for model in genai.list_models():
+    if 'generateContent' in model.supported_generation_methods:
+        print(model.name)
+
+# Load the generative model (replace 'gemini-1.5-pro-latest' if desired)
+model_name = 'gemini-1.0-pro'
+model = genai.GenerativeModel(model_name)
+
+print("Welcome to the Genie command! You can ask me questions about the Linux terminal.")
+while True:
+    question = input("Enter your question (or type 'exit' to quit): ")
+    if question.lower() == "exit":
+        print("Exiting Genie command. Goodbye!")
+        break
+    
+    # Append "in Ubuntu" to the question
+    question_with_ubuntu = question + " in Ubuntu"
+    
+    if is_terminal_question(question_with_ubuntu):
+        response = model.generate_content(question_with_ubuntu)
+        print("Genie:")
+        print(to_markdown(response.text))
+    else:
+        print("Genie: I'm sorry, I only answer bash specific questions.")
+
 
 <br/>
 <br/>
