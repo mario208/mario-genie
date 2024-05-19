@@ -2,9 +2,9 @@
 
 
 
-# <p align="center">Mesba7 💡</p>
+# <p align="center">decomentation 💡</p>
 
-An AI chatbot with Gemini API to assist in your daily usege of linux insated of RTFM 😉
+An AI chatbot with Gemini API to assist in your daily usage of linux insated of RTFM 😉
 
 # Installation
 
@@ -18,10 +18,10 @@ Setuping the app on your machine
   1. download the repo
   
   ```bash
-  git clone https://github.com/AmrEL3taaL/mesba7
+  git clone https://github.com/keryakosALKOMOS/keryakosALKOMOS
   ```
   
-  2. Run the installer file named "mesba7"
+  2. Run the installer file named "kero's chat boot"
   ```bash
   ./mesba7
   ```
