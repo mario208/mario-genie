@@ -18,13 +18,10 @@ Setuping the app on your machine
   1. download the repo
   
   ```bash
-  git clone https://github.com/keryakosALKOMOS/keryakosALKOMOS
+  git clone https://github.com/keryakosALKOMOS
   ```
   
-  2. Run the installer file named "kero's chat boot"
-  ```bash
-  ./code
-  ```
+
 #### Get your own API key
  3. You will be asked for the api key. to get the key go to : 
   	 1. [Get API key | Google AI Studio](https://aistudio.google.com/app/apikey)
